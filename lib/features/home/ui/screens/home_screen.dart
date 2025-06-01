@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafty_bay/app/app_colors.dart';
 import 'package:crafty_bay/app/assets_paths.dart';
+import 'package:crafty_bay/features/common/ui/controllers/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/features/product/ui/screens/product_category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import '../widgets/app_bar_icon_button.dart';
 import '../widgets/home_carousel_slider.dart';
@@ -12,7 +14,7 @@ import '../widgets/product_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-  static final String name = '/home';
+
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -23,23 +25,28 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            SizedBox(height: 16),
-            ProductSearchBar(),
-            SizedBox(height: 16),
-            HomeCarouselSlider(),
-            SizedBox(height: 16),
-            _buildSectionHeader(title: 'Categories', onTapSeeAll: () {
-              Navigator.pushNamed(context, ProductCategoryScreen.name);
-            }),
-            _getCategoryList(),
-            _buildSectionHeader(title: 'Popular', onTapSeeAll: () {}),
-            _buildSectionHeader(title: 'Special', onTapSeeAll: () {}),
-            _buildSectionHeader(title: 'New', onTapSeeAll: () {}),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 16),
+              ProductSearchBar(),
+              SizedBox(height: 16),
+              HomeCarouselSlider(),
+              SizedBox(height: 16),
+              _buildSectionHeader(
+                title: 'Categories',
+                onTapSeeAll: () {
+                  Get.find<MainBottomNavController>().moveToCategory();
+                },
+              ),
+              _getCategoryList(),
+              _buildSectionHeader(title: 'Popular', onTapSeeAll: () {}),
+              _buildSectionHeader(title: 'Special', onTapSeeAll: () {}),
+              _buildSectionHeader(title: 'New', onTapSeeAll: () {}),
+            ],
+          ),
         ),
       ),
     );
@@ -76,8 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       height: 100,
       child: ListView.separated(
-        separatorBuilder: (context,index){
-          return SizedBox(width: 8,);
+        separatorBuilder: (context, index) {
+          return SizedBox(width: 8);
         },
         scrollDirection: Axis.horizontal,
         itemCount: 10,
@@ -88,4 +95,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
