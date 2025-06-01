@@ -160,4 +160,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _onTapSignUpButton() {
     if (_formKey.currentState!.validate()) {}
   }
+
+  @override
+  void dispose() {
+    _emailTEController.dispose();
+    _firstNameTEController.dispose();
+    _lastNameTEController.dispose();
+    _passwordTEController.dispose();
+    _mobileTEController.dispose();
+    _cityTEController.dispose();
+    _addressTEController.dispose();
+    super.dispose();
+  }
 }

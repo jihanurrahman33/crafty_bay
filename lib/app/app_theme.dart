@@ -45,6 +45,16 @@ class AppTheme {
         letterSpacing: 0.4,
       ),
       headlineMedium: TextStyle(fontSize: 16, color: Colors.grey),
+      titleMedium: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.4,
+      ),
+      titleSmall: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.4,
+      ),
     );
   }
 }

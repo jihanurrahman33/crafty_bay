@@ -87,4 +87,10 @@ class _LoginScreenState extends State<LoginScreen> {
     // }
     Navigator.pushNamed(context, SignUpScreen.name);
   }
+  @override
+  void dispose() {
+    _emailTEController.dispose();
+    _passwordTEController.dispose();
+    super.dispose();
+  }
 }
