@@ -1,10 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:crafty_bay/app/app_colors.dart';
 import 'package:crafty_bay/app/assets_paths.dart';
+import 'package:crafty_bay/features/product/ui/screens/product_category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../widgets/app_bar_icon_button.dart';
 import '../widgets/home_carousel_slider.dart';
+import '../../../common/ui/widgets/product_category_item.dart';
 import '../widgets/product_search_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,18 +32,18 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 16),
             HomeCarouselSlider(),
             SizedBox(height: 16),
-            _buildSectionHeader(title: 'Categories',onTapSeeAll: (){}),
-
-            _buildSectionHeader(title: 'Popular',onTapSeeAll: (){}),
-            _buildSectionHeader(title: 'Special',onTapSeeAll: (){}),
-            _buildSectionHeader(title: 'New',onTapSeeAll: (){}),
+            _buildSectionHeader(title: 'Categories', onTapSeeAll: () {
+              Navigator.pushNamed(context, ProductCategoryScreen.name);
+            }),
+            _getCategoryList(),
+            _buildSectionHeader(title: 'Popular', onTapSeeAll: () {}),
+            _buildSectionHeader(title: 'Special', onTapSeeAll: () {}),
+            _buildSectionHeader(title: 'New', onTapSeeAll: () {}),
           ],
         ),
       ),
     );
   }
-
-
 
   AppBar _buildAppBar() {
     return AppBar(
@@ -55,16 +58,34 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
-  Widget _buildSectionHeader({required String title,required VoidCallback onTapSeeAll}) {
+
+  Widget _buildSectionHeader({
+    required String title,
+    required VoidCallback onTapSeeAll,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
+        Text(title, style: Theme.of(context).textTheme.titleSmall),
         TextButton(onPressed: onTapSeeAll, child: Text('See all')),
       ],
     );
   }
+
+  Widget _getCategoryList() {
+    return SizedBox(
+      height: 100,
+      child: ListView.separated(
+        separatorBuilder: (context,index){
+          return SizedBox(width: 8,);
+        },
+        scrollDirection: Axis.horizontal,
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ProductCategoryItem();
+        },
+      ),
+    );
+  }
 }
+
