@@ -4,6 +4,8 @@ import 'package:crafty_bay/features/auth/ui/screens/splash_screen.dart';
 import 'package:crafty_bay/features/common/ui/screens/main_bottom_nav_screen.dart';
 import 'package:crafty_bay/features/home/ui/screens/home_screen.dart';
 import 'package:crafty_bay/features/product/ui/screens/product_category_screen.dart';
+import 'package:crafty_bay/features/product/ui/screens/product_list_screen.dart';
+import 'package:crafty_bay/features/wishlist/ui/screens/wish_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -12,18 +14,16 @@ class AppRoutes {
 
     if (settings.name == SplashScreen.name) {
       screenWidget = SplashScreen();
-    }
-    else if (settings.name == LoginScreen.name) {
+    } else if (settings.name == LoginScreen.name) {
       screenWidget = LoginScreen();
-    }
-    else if (settings.name == SignUpScreen.name) {
+    } else if (settings.name == SignUpScreen.name) {
       screenWidget = SignUpScreen();
+    } else if (settings.name == MainBottomNavScreen.name) {
+      screenWidget = MainBottomNavScreen();
+    } else if (settings.name == ProductListScreen.name) {
+      final String category = settings.arguments as String;
+      screenWidget = ProductListScreen(category: category);
     }
-    else if(settings.name==MainBottomNavScreen.name){
-      screenWidget=MainBottomNavScreen();
-    }
-
-
 
     return MaterialPageRoute(builder: (context) => screenWidget);
   }
