@@ -1,5 +1,11 @@
+import 'package:crafty_bay/core/centered_circular_progress_indicator.dart';
+import 'package:crafty_bay/core/ui/widgets/snack_bar_message.dart';
+import 'package:crafty_bay/features/auth/data/models/sign_up_request_model.dart';
+import 'package:crafty_bay/features/auth/ui/controller/sign_up_controller.dart';
 import 'package:crafty_bay/features/auth/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/state_manager.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -18,6 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _addressTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final SignUpController _signUpController = Get.find<SignUpController>();
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -58,7 +65,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 8),
                   TextFormField(
-
                     controller: _firstNameTEController,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(hintText: 'First Name'),
@@ -71,7 +77,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 8),
                   TextFormField(
-
                     controller: _lastNameTEController,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(hintText: 'Last Name'),
@@ -84,17 +89,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 8),
                   TextFormField(
-
                     controller: _mobileTEController,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(hintText: 'Mobile'),
                     validator: (String? value) {
                       if (value?.trim().isNotEmpty ?? false) {
-                         final RegExp _regExp = RegExp(r'^(?:\+88|88)?(01[3-9]\d{8})$');
-                         if(!_regExp.hasMatch(value!)){
-                           return 'Enter a valid mobile number';
-                         }
-
+                        final RegExp _regExp = RegExp(
+                          r'^(?:\+88|88)?(01[3-9]\d{8})$',
+                        );
+                        if (!_regExp.hasMatch(value!)) {
+                          return 'Enter a valid mobile number';
+                        }
                       }
                       return null;
                     },
@@ -115,7 +120,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 8),
                   TextFormField(
-
                     controller: _cityTEController,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(hintText: 'City'),
@@ -132,8 +136,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: _addressTEController,
                     textInputAction: TextInputAction.done,
                     decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(16),
-                        hintText: 'Shipping Address'),
+                      contentPadding: EdgeInsets.all(16),
+                      hintText: 'Shipping Address',
+                    ),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
                         return 'Enter your shipping address';
@@ -144,9 +149,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 8),
 
                   SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _onTapSignUpButton,
-                    child: Text('Sign Up'),
+                  GetBuilder<SignUpController>(
+                    builder: (_) {
+                      return Visibility(
+                        visible: _signUpController.inProgress == false,
+                        replacement: CenteredCircularProgressIndicator(),
+                        child: ElevatedButton(
+                          onPressed: _onTapSignUpButton,
+                          child: Text('Sign Up'),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -157,8 +170,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _onTapSignUpButton() {
-    if (_formKey.currentState!.validate()) {}
+  Future<void> _onTapSignUpButton() async {
+    if (_formKey.currentState!.validate()) {
+      final SignUpRequestModel model = SignUpRequestModel(
+        email: _emailTEController.text.trim(),
+        firstName: _firstNameTEController.text.trim(),
+        lastName: _lastNameTEController.text.trim(),
+        password: _passwordTEController.text,
+        city: _cityTEController.text.trim(),
+        phone: _mobileTEController.text.trim(),
+      );
+      final bool isSuccess = await _signUpController.signUp(model);
+      if (isSuccess) {
+        // TODO: Navifate to verify otp Screen
+        // Navigator.pushNamed(context, routeName)
+        showSnackBarMessage(context, _signUpController.message!);
+      } else {
+        showSnackBarMessage(context, _signUpController.errorMessage!, true);
+      }
+    }
   }
 
   @override
