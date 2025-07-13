@@ -2,6 +2,7 @@ import 'package:crafty_bay/core/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/core/ui/widgets/snack_bar_message.dart';
 import 'package:crafty_bay/features/auth/data/models/sign_up_request_model.dart';
 import 'package:crafty_bay/features/auth/ui/controller/sign_up_controller.dart';
+import 'package:crafty_bay/features/auth/ui/screens/verify_otp_screen.dart';
 import 'package:crafty_bay/features/auth/ui/widgets/app_logo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
@@ -182,9 +183,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       final bool isSuccess = await _signUpController.signUp(model);
       if (isSuccess) {
-        // TODO: Navifate to verify otp Screen
-        // Navigator.pushNamed(context, routeName)
         showSnackBarMessage(context, _signUpController.message!);
+        Navigator.pushNamed(
+          context,
+          VerifyOtpScreen.name,
+          arguments: _emailTEController.text.trim(),
+        );
       } else {
         showSnackBarMessage(context, _signUpController.errorMessage!, true);
       }

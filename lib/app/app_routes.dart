@@ -1,14 +1,12 @@
 import 'package:crafty_bay/features/auth/ui/screens/login_screen.dart';
 import 'package:crafty_bay/features/auth/ui/screens/sign_up_screen.dart';
 import 'package:crafty_bay/features/auth/ui/screens/splash_screen.dart';
+import 'package:crafty_bay/features/auth/ui/screens/verify_otp_screen.dart';
 import 'package:crafty_bay/features/common/ui/screens/main_bottom_nav_screen.dart';
-import 'package:crafty_bay/features/home/ui/screens/home_screen.dart';
 import 'package:crafty_bay/features/product/ui/screens/add_review_screen.dart';
-import 'package:crafty_bay/features/product/ui/screens/product_category_screen.dart';
 import 'package:crafty_bay/features/product/ui/screens/product_details_screen.dart';
 import 'package:crafty_bay/features/product/ui/screens/product_list_screen.dart';
 import 'package:crafty_bay/features/product/ui/screens/product_reviews_screen.dart';
-import 'package:crafty_bay/features/wishlist/ui/screens/wish_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class AppRoutes {
@@ -29,10 +27,13 @@ class AppRoutes {
     } else if (settings.name == ProductDetailsScreen.name) {
       final String productId = settings.arguments as String;
       screenWidget = ProductDetailsScreen(productId: productId);
-    }else if(settings.name==ProductReviewsScreen.name){
-      screenWidget=ProductReviewsScreen();
-    }else if(settings.name==AddReviewScreen.name){
-      screenWidget=AddReviewScreen();
+    } else if (settings.name == ProductReviewsScreen.name) {
+      screenWidget = ProductReviewsScreen();
+    } else if (settings.name == AddReviewScreen.name) {
+      screenWidget = AddReviewScreen();
+    } else if (settings.name == VerifyOtpScreen.name) {
+      final String email = settings.arguments as String;
+      screenWidget = VerifyOtpScreen(email: email);
     }
 
     return MaterialPageRoute(builder: (context) => screenWidget);
