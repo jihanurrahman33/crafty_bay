@@ -17,6 +17,8 @@ dependencies:
   flutter_svg: ^2.1.0
   carousel_slider: ^5.0.0
   get:
+  http:
+  logger:
 
 dev_dependencies:
   flutter_test:
