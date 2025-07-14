@@ -1,10 +1,10 @@
+import 'package:crafty_bay/app/assets_paths.dart';
 import 'package:crafty_bay/app/constants.dart';
 import 'package:crafty_bay/features/common/models/product_model.dart';
 import 'package:crafty_bay/features/product/ui/screens/product_details_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../app/app_colors.dart';
-import '../../../../app/assets_paths.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.productModel});
@@ -47,7 +47,10 @@ class ProductCard extends StatelessWidget {
               ),
               width: 150,
               child: Image.network(
-                productModel.photoUrls.first ?? '',
+                productModel.photoUrls.first,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(AssetPath.dummyNikeShoePng);
+                },
                 height: 80,
               ),
             ),

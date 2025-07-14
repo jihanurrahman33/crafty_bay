@@ -3,6 +3,7 @@ import 'package:crafty_bay/core/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/features/common/controllers/category_list_controller.dart';
 import 'package:crafty_bay/features/common/ui/controllers/main_bottom_nav_controller.dart';
 import 'package:crafty_bay/features/home/ui/controllers/home_slider_controller.dart';
+import 'package:crafty_bay/features/home/ui/controllers/popular_product_list_controller.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -70,12 +71,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _getPopularProducts() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        spacing: 8,
-        //  children: [1, 2, 3, 4].map((e) => ProductCard()).toList(),
-      ),
+    return GetBuilder<PopularProductListController>(
+      builder: (popularProductListController) {
+        return Visibility(
+          visible: popularProductListController.inProgress == false,
+          replacement: CenteredCircularProgressIndicator(),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              spacing: 8,
+              children:
+                  popularProductListController.productModelList
+                      .map((product) => ProductCard(productModel: product))
+                      .toList(),
+            ),
+          ),
+        );
+      },
     );
   }
 
