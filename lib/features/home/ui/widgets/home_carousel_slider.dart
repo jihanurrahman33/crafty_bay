@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:crafty_bay/app/app_colors.dart';
+import 'package:crafty_bay/features/home/data/models/slider_model.dart';
 import 'package:flutter/material.dart';
 
 class HomeCarouselSlider extends StatefulWidget {
-  const HomeCarouselSlider({super.key});
+  const HomeCarouselSlider({super.key, required this.sliders});
+  final List<SliderModel> sliders;
 
   @override
   State<HomeCarouselSlider> createState() => _HomeCarouselSliderState();
@@ -22,10 +24,9 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
             onPageChanged: (int currentIndex, _) {
               _currentSlider.value = currentIndex;
             },
-
           ),
           items:
-              [1, 2, 3, 4, 5].map((i) {
+              widget.sliders.map((slider) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
@@ -34,9 +35,12 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: AppColors.themeColor,
+                        image: DecorationImage(
+                          image: NetworkImage(slider.photoUrl),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       alignment: Alignment.center,
-                      child: Text('text $i', style: TextStyle(fontSize: 16.0)),
                     );
                   },
                 );
@@ -49,7 +53,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < widget.sliders.length; i++)
                   Container(
                     margin: EdgeInsets.only(left: 4),
                     width: 12,

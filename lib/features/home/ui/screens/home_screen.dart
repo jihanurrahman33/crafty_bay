@@ -1,8 +1,8 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:crafty_bay/app/app_colors.dart';
 import 'package:crafty_bay/app/assets_paths.dart';
+import 'package:crafty_bay/core/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/features/common/ui/controllers/main_bottom_nav_controller.dart';
-import 'package:crafty_bay/features/product/ui/screens/product_category_screen.dart';
+import 'package:crafty_bay/features/home/ui/controllers/home_slider_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -33,7 +33,19 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 16),
               ProductSearchBar(),
               SizedBox(height: 16),
-              HomeCarouselSlider(),
+              GetBuilder<HomeSliderController>(
+                builder: (sliderController) {
+                  if (sliderController.inProgress) {
+                    return SizedBox(
+                      height: 192,
+                      child: CenteredCircularProgressIndicator(),
+                    );
+                  }
+                  return HomeCarouselSlider(
+                    sliders: sliderController.sliderModelList,
+                  );
+                },
+              ),
               SizedBox(height: 16),
               _buildSectionHeader(
                 title: 'Categories',

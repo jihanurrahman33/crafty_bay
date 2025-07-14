@@ -1,5 +1,6 @@
 import 'package:crafty_bay/features/cart/ui/screens/cart_screen.dart';
 import 'package:crafty_bay/features/common/ui/controllers/main_bottom_nav_controller.dart';
+import 'package:crafty_bay/features/home/ui/controllers/home_slider_controller.dart';
 import 'package:crafty_bay/features/home/ui/screens/home_screen.dart';
 import 'package:crafty_bay/features/product/ui/screens/product_category_screen.dart';
 import 'package:crafty_bay/features/wishlist/ui/screens/wish_list_screen.dart';
@@ -15,6 +16,12 @@ class MainBottomNavScreen extends StatefulWidget {
 }
 
 class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
+  @override
+  void initState() {
+    Get.find<HomeSliderController>().getHomeSliders();
+    super.initState();
+  }
+
   final List<Widget> _screens = [
     HomeScreen(),
     ProductCategoryScreen(),
@@ -24,8 +31,7 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MainBottomNavController>(
-
-      builder:(navController) {
+      builder: (navController) {
         return Scaffold(
           body: _screens[navController.selectedIndex],
           bottomNavigationBar: NavigationBar(
@@ -33,13 +39,22 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
             onDestinationSelected: navController.changeIndex,
             destinations: [
               NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-              NavigationDestination(icon: Icon(Icons.category_outlined), label: 'Category'),
-              NavigationDestination(icon: Icon(Icons.shopping_cart), label: 'Cart'),
-              NavigationDestination(icon: Icon(Icons.favorite_border_rounded), label: 'Wishlist'),
+              NavigationDestination(
+                icon: Icon(Icons.category_outlined),
+                label: 'Category',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.shopping_cart),
+                label: 'Cart',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.favorite_border_rounded),
+                label: 'Wishlist',
+              ),
             ],
           ),
         );
-      }
+      },
     );
   }
 }
