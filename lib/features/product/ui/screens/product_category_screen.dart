@@ -66,7 +66,11 @@ class _ProductCategoryScreenState extends State<ProductCategoryScreen> {
                       ),
                       itemCount: controller.categoryModelList.length,
                       itemBuilder: (context, index) {
-                        return FittedBox(child: ProductCategoryItem());
+                        return FittedBox(
+                          child: ProductCategoryItem(
+                            categoryModel: controller.categoryModelList[index],
+                          ),
+                        );
                       },
                     ),
                   ),

@@ -7,4 +7,9 @@ class Urls {
   static const String homeSlidersUrl = '$_baseUrl/slides';
   static String categoryListUrl(int count, int currentPage) =>
       '$_baseUrl/categories?count=$count&page=$currentPage';
+  static String productListByCategoryUrl(
+    int count,
+    int currentPage,
+    String categoryId,
+  ) => '$_baseUrl/products?count=$count&page=$currentPage&category=$categoryId';
 }

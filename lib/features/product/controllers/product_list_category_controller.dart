@@ -1,10 +1,10 @@
 import 'package:crafty_bay/app/urls.dart';
 import 'package:crafty_bay/core/services/network/network_client.dart';
-import 'package:crafty_bay/features/common/models/category_model.dart';
+import 'package:crafty_bay/features/common/models/product_model.dart';
 
 import 'package:get/get.dart';
 
-class CategoryListController extends GetxController {
+class ProductListCategoryController extends GetxController {
   final int _count = 30;
   int _currentPage = 0;
   int? _lastPage;
@@ -17,19 +17,17 @@ class CategoryListController extends GetxController {
   bool get inProgress => _inProgress;
   String? get errorMessage => _errorMessage;
 
-  final List<CategoryModel> _categoryModelList = [];
+  final List<ProductModel> _productModelList = [];
 
-  List<CategoryModel> get categoryModelList => _categoryModelList;
-  int get homeCategoryListItemLength =>
-      _categoryModelList.length > 10 ? 10 : _categoryModelList.length;
-  //actual method
-  Future<void> getCategoryList() async {
+  List<ProductModel> get productModelList => _productModelList;
+
+  Future<void> getProductList(String categoryId) async {
     _currentPage++;
     if (_lastPage != null && _lastPage! < _currentPage) {
       return;
     }
     if (_currentPage == 1) {
-      _categoryModelList.clear();
+      _productModelList.clear();
       _initialLoadingInProgress = true;
     } else {
       _inProgress = true;
@@ -37,16 +35,16 @@ class CategoryListController extends GetxController {
 
     update();
     final NetworkResponse response = await Get.find<NetworkClient>().getRequest(
-      Urls.categoryListUrl(_count, _currentPage),
+      Urls.productListByCategoryUrl(_count, _currentPage, categoryId),
     );
     if (response.isSuccess) {
       _lastPage = response.responseData!['data']['last_page'] ?? 0;
-      List<CategoryModel> list = [];
-      for (Map<String, dynamic> category
+      List<ProductModel> list = [];
+      for (Map<String, dynamic> product
           in response.responseData!['data']['results']) {
-        list.add(CategoryModel.fromJson(category));
+        list.add(ProductModel.fromJson(product));
       }
-      _categoryModelList.addAll(list);
+      _productModelList.addAll(list);
 
       _errorMessage = null;
     } else {
