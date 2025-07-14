@@ -17,13 +17,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   Future<void> _moveToHomeScreen() async {
     await Future.delayed(Duration(seconds: 2));
-    // final bool isUserLoggedIn =
-    //     await Get.find<AuthController>().isUserLoggedIn();
-    // if (isUserLoggedIn) {
-    //   Navigator.pushReplacementNamed(context, MainBottomNavScreen.name);
-    // } else {
-    //   Navigator.pushReplacementNamed(context, LoginScreen.name);
-    // }
+    await Get.find<AuthController>().getUserData();
     Navigator.pushReplacementNamed(context, MainBottomNavScreen.name);
   }
 
