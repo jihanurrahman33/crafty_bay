@@ -2,6 +2,7 @@ import 'package:crafty_bay/core/centered_circular_progress_indicator.dart';
 import 'package:crafty_bay/core/ui/widgets/snack_bar_message.dart';
 import 'package:crafty_bay/features/auth/data/models/login_request_model.dart';
 import 'package:crafty_bay/features/auth/ui/controller/login_controller.dart';
+import 'package:crafty_bay/features/auth/ui/screens/sign_up_screen.dart';
 import 'package:crafty_bay/features/auth/ui/widgets/app_logo.dart';
 import 'package:crafty_bay/features/common/ui/screens/main_bottom_nav_screen.dart';
 import 'package:flutter/material.dart';
@@ -86,6 +87,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     },
                   ),
+
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: _onTapSignUpButton,
+                        child: Text('Sign Up'),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -93,6 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void _onTapSignUpButton() {
+    Navigator.pushNamed(context, SignUpScreen.name);
   }
 
   Future<void> _onTapLoginButton() async {

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:crafty_bay/features/auth/ui/screens/login_screen.dart';
 import 'package:crafty_bay/features/auth/ui/widgets/app_logo.dart';
 import 'package:crafty_bay/features/common/controllers/auth_controller.dart';
 import 'package:crafty_bay/features/common/ui/screens/main_bottom_nav_screen.dart';

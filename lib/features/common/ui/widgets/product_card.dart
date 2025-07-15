@@ -46,13 +46,16 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               width: 150,
-              child: Image.network(
-                productModel.photoUrls.first,
-                errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(AssetPath.dummyNikeShoePng);
-                },
-                height: 80,
-              ),
+              child:
+                  productModel.photoUrls.isEmpty
+                      ? Image.asset(AssetPath.dummyNikeShoePng)
+                      : Image.network(
+                        productModel.photoUrls.first,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(AssetPath.dummyNikeShoePng);
+                        },
+                        height: 80,
+                      ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

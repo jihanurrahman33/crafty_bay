@@ -20,9 +20,12 @@ class MainBottomNavScreen extends StatefulWidget {
 class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
   @override
   void initState() {
-    Get.find<HomeSliderController>().getHomeSliders();
-    Get.find<CategoryListController>().getCategoryList();
-    Get.find<PopularProductListController>().getPopularProducts();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Get.find<HomeSliderController>().getHomeSliders();
+      Get.find<CategoryListController>().getCategoryList();
+      Get.find<PopularProductListController>().getPopularProducts();
+    });
+
     super.initState();
   }
 

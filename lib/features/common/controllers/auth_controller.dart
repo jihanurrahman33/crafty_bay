@@ -24,7 +24,7 @@ class AuthController extends GetxController {
     String? userData = sharedPreferences.getString(userDataKey);
     String? tokenData = sharedPreferences.getString(_tokenKey);
     if (userData != null) {
-      userModel = jsonDecode(userData);
+      userModel = UserModel.fromJson(jsonDecode(userData));
       accessToken = tokenData;
     }
   }

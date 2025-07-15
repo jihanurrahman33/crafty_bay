@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class UserModel {
   final String id;
   final String firstName;
@@ -31,6 +29,14 @@ class UserModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {};
+    return {
+      '_id': id,
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'phone': phone,
+      'avatar_url': avatatUrl,
+      'city': city,
+    };
   }
 }
