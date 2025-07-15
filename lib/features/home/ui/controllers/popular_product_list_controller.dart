@@ -28,17 +28,7 @@ class PopularProductListController extends GetxController {
         list.add(ProductModel.fromJson(product));
       }
 
-      List<ProductModel> popularProducts =
-          list.where((product) {
-            // Ensure categories is a list of maps
-            final List categories = product.categories;
-
-            return categories.any(
-              (cat) => cat is Map<String, dynamic> && cat['slug'] == 'popular',
-            );
-          }).toList();
-
-      _productModelList = popularProducts;
+      _productModelList = list;
       isSuccess = true;
       _errorMessage = null;
     } else {

@@ -1,12 +1,21 @@
+import 'package:crafty_bay/features/cart/data/model/cart_item_model.dart';
+import 'package:crafty_bay/features/cart/ui/controllers/cart_list_controller.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import '../../../../app/app_colors.dart';
-import '../../../../app/assets_paths.dart';
 import '../../../../app/constants.dart';
 import '../../../product/ui/widgets/inc_dec_button.dart';
 
 class CartItem extends StatelessWidget {
-  const CartItem({super.key});
+  const CartItem({
+    super.key,
+    required this.cartItemModel,
+    required this.deleteItem,
+  });
+
+  final CartItemModel cartItemModel;
+
+  final VoidCallback deleteItem;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +28,13 @@ class CartItem extends StatelessWidget {
             height: 100,
             width: 100,
             padding: EdgeInsets.all(8),
-            child: Image.asset(AssetPath.dummyNikeShoePng,fit: BoxFit.scaleDown,),
+            child: Image.network(
+              cartItemModel.productModel.photoUrls.first,
+              fit: BoxFit.scaleDown,
+              errorBuilder: (_, __, ___) {
+                return Center(child: Icon(Icons.error_outline));
+              },
+            ),
           ),
           Expanded(
             child: Padding(
@@ -39,7 +54,7 @@ class CartItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Nike 1205kMS - new Shoe 2025',
+                              cartItemModel.productModel.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -51,7 +66,7 @@ class CartItem extends StatelessWidget {
                             ),
 
                             Text(
-                              'Color: Black Size: XL',
+                              'Color: ${cartItemModel.color ?? ''} Size: ${cartItemModel.size ?? ''}',
                               maxLines: 1,
 
                               style: TextStyle(
@@ -63,7 +78,7 @@ class CartItem extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: deleteItem,
                         icon: Icon(
                           Icons.delete_forever_outlined,
                           color: Colors.black45,
@@ -76,14 +91,21 @@ class CartItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${Constants.takaSign}100',
+                        '${Constants.takaSign}${cartItemModel.productModel.currentPrice}',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: AppColors.themeColor,
                         ),
                       ),
-                      IncDecButton(onChange: (int value) {}),
+                      IncDecButton(
+                        onChange: (int value) {
+                          Get.find<CartListController>().updateQuantity(
+                            cartItemModel.id,
+                            value,
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ],

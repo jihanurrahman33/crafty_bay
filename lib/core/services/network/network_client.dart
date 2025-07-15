@@ -194,11 +194,7 @@ class NetworkClient {
       Uri uri = Uri.parse(url);
 
       _logRequest(url, headers: commonHeaders());
-      final response = await delete(
-        uri,
-        headers: commonHeaders(),
-        body: jsonEncode(body),
-      );
+      final response = await delete(uri, headers: commonHeaders());
       _logResponse(response);
       if (response.statusCode == 200 || response.statusCode == 201) {
         final responseBody = jsonDecode(response.body);

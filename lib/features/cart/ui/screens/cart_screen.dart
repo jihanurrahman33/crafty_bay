@@ -1,7 +1,10 @@
-import 'package:crafty_bay/app/assets_paths.dart';
-import 'package:crafty_bay/features/product/ui/widgets/inc_dec_button.dart';
+import 'package:crafty_bay/core/centered_circular_progress_indicator.dart';
+import 'package:crafty_bay/core/ui/widgets/snack_bar_message.dart';
+import 'package:crafty_bay/features/cart/ui/controllers/cart_list_controller.dart';
+import 'package:crafty_bay/features/cart/ui/controllers/delete_cart_item_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/constants.dart';
@@ -16,6 +19,15 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final CartListController _cartListController = Get.find<CartListController>();
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _cartListController.getCartItemList();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -31,25 +43,49 @@ class _CartScreenState extends State<CartScreen> {
           ),
           title: Text('Cart'),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ListView.separated(
-                  itemCount: 12,
-                  itemBuilder: (context, index) {
-                    return CartItem();
-                  },
-                  separatorBuilder: (_,__){
-                    return SizedBox(height: 4,);
-                  },
-                ),
+        body: GetBuilder<CartListController>(
+          init: _cartListController,
+          builder: (_) {
+            if (_cartListController.inProgress) {
+              return CenteredCircularProgressIndicator();
+            }
+            if (_cartListController.errorMessage != null) {
+              return Center(child: Text(_cartListController.errorMessage!));
+            }
+            return Column(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ListView.separated(
+                      itemCount: _cartListController.cartItemList.length,
+                      itemBuilder: (context, index) {
+                        return CartItem(
+                          deleteItem: () {
+                            Logger().w(
+                              _cartListController
+                                  .cartItemList[index]
+                                  .productModel
+                                  .title,
+                            );
 
-              ),
-            ),
-            buildPriceAndCheckoutSection(context),
-          ],
+                            _deleteCartItem(
+                              cartItemId:
+                                  _cartListController.cartItemList[index].id,
+                            );
+                          },
+                          cartItemModel:
+                              _cartListController.cartItemList[index],
+                        );
+                      },
+                      separatorBuilder: (_, __) => SizedBox(height: 4),
+                    ),
+                  ),
+                ),
+                buildPriceAndCheckoutSection(context),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -73,7 +109,7 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               Text('Total Price', style: Theme.of(context).textTheme.bodyLarge),
               Text(
-                '${Constants.takaSign}100',
+                '${Constants.takaSign}${_cartListController.totalPrice}',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
@@ -91,10 +127,19 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  Future<void> _deleteCartItem({required String cartItemId}) async {
+    bool result = await Get.find<DeleteCartItemController>().deleteCartItem(
+      cartItemId,
+    );
+    if (result) {
+      showSnackBarMessage(context, 'Removed from cart');
+      _cartListController.getCartItemList();
+    } else {
+      showSnackBarMessage(context, 'Failed to remove');
+    }
+  }
+
   void _backToHome() {
     Get.find<MainBottomNavController>().backToHome();
   }
 }
-
-
-

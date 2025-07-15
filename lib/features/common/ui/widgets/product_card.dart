@@ -21,7 +21,7 @@ class ProductCard extends StatelessWidget {
         );
       },
       child: Container(
-        width: 150,
+        width: 160,
         margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
           color: Colors.white,
